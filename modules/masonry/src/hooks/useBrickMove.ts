@@ -277,6 +277,7 @@ export function useBrickMove(
                         if (newTowerId) {
                             targetTowerId = newTowerId;
                             targetPosition = absPos;
+                            triggerBrickAnimation(id, 'brick-detach-flash');
                         }
                     }
 

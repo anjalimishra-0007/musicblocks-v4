@@ -219,6 +219,33 @@ describe('useBrickMove drag', () => {
     useConnectionPreviewStore.getState().clearPreviewTarget();
   });
 
+  it('triggers detach flash animation when a connected child brick is detached on drag start', () => {
+    const parent = makeEmptyStatement('parent-1', 0);
+    const child = makeEmptyStatement('child-1', 0);
+    parent.next = child;
+
+    useWorkspaceStore.setState({
+      towers: {
+        'tower-parent': {
+          id: 'tower-parent',
+          root: parent,
+          position: { x: 100, y: 100 },
+        },
+      },
+    });
+
+    const childEl = document.createElement('div');
+    childEl.setAttribute('data-brick-id', 'child-1');
+    document.body.appendChild(childEl);
+
+    const ref = { current: childEl };
+    renderHook(() => useBrickMove('child-1', ref));
+
+    listeners().start({});
+
+    expect(childEl.classList.contains('brick-detach-flash')).toBe(true);
+  });
+
   it('moves the dragged tower by the pointer delta', () => {
     mountBrickMove();
 
